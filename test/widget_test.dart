@@ -7,22 +7,57 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:random_color_app/my_app.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    // await tester.pumpWidget(const MyApp());
+  testWidgets(
+    'Change background and text colors test',
+    (WidgetTester tester) async {
+      /// To pass this test, our background must not be white (default value)
+      /// and our text must not be black (default).
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(const MyApp());
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      //Check if background is white.
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) => widget is Material && widget.color == Colors.white,
+          description: 'Background is white.',
+        ),
+        findsOneWidget,
+      );
+      //Check if text is black.
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) =>
+              widget is Text && widget.style?.color == Colors.black,
+          description: 'Text is black.',
+        ),
+        findsOneWidget,
+      );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      // Tap the text widget.
+      await tester.tap(find.byType(Text));
+      await tester.pump();
+
+      // Verify that the colors have been changed.
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) => widget is Material && widget.color == Colors.white,
+          description: "Background isn't white.",
+        ),
+        findsNothing,
+      );
+
+      expect(
+        find.byWidgetPredicate(
+          (Widget widget) =>
+              widget is Text && widget.style?.color == Colors.black,
+          description: "Text isn't white.",
+        ),
+        findsNothing,
+      );
+    },
+  );
 }

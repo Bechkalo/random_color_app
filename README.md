@@ -1,14 +1,22 @@
-# flutter_project_template
-[![flutter_project_template](https://nokycucwgzweensacwfy.supabase.co/functions/v1/get_project_badge?projectName=flutter_project_template)](https://www.worklog.ai)
+# random_color_app
 
-📖 Template for flutter projects using solid_lints, CI for tests and analysis.
+Solid Software test project.
 
-- Uses latest stable flutter
-- Repo name as your project name
-- Organization from your profile email address or default
+## Project Description
 
-# Usage
-1. Press "Use this template" on the menu.
-2. Fill Github form with your new repo name and press "Create repository from template"
-3. Wait for it to be created and set up action is complete. In a couple of minutes, you'll see the flutter project created in your repo once Github Actions are complete.
-4. Clone and code.
+This Flutter application uses state management provider to change its color randomly whenever the user presses anywhere on the screen. 
+
+It also has a test to verify that the color changes when the user taps the screen.
+
+## Important
+
+You need to generate a file to use this app. Please use the generated commands for it.
+
+To run generator:
+flutter pub run build_runner build
+
+To watch updates and resolve conflicts:
+flutter packages pub run build_runner watch --delete-conflicting-outputs
+
+
+

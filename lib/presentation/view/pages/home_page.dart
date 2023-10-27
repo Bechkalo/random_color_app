@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:random_color_app/presentation/view/common_widgets/neumorphic_container.dart';
+import 'package:random_color_app/utility/collection_extensions.dart';
+import 'package:random_color_app/utility/color_utils.dart';
 
 /// This widget is the main page of application.
 class HomePage extends StatefulWidget {
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   void _onPointerUp(_) {
     setState(() {
       _isPressed = false;
-      const newColor = Colors.green;
+      final newColor = ColorUtils.materialColors.getRandom() ?? Colors.black;
       color = newColor;
     });
   }

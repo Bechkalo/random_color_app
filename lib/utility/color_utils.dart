@@ -11,10 +11,17 @@ import 'package:flutter/material.dart';
 /// // Mix two colors together.
 /// Color mixedColor = ColorUtils.mixColors(Colors.white, Colors.black, 0.5);
 ///
+/// // Get list of primaries and accents colors.
+/// List<Color> materialColors = ColorUtils.materialColors;
+///
 /// ```
 
 class ColorUtils {
   static ColorUtils? _instance;
+
+  /// Method for concatenating lists Colors.primaries and Colors.accents
+  static List<Color> get materialColors =>
+      <Color>[...Colors.primaries, ...Colors.accents];
 
   /// Factory constructor for the `ColorUtils` class.
   ///

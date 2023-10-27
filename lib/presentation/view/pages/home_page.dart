@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import 'package:random_color_app/presentation/controllers/home_page/home_page_controller.dart';
 import 'package:random_color_app/presentation/view/common_widgets/neumorphic_container.dart';
-import 'package:random_color_app/utility/collection_extensions.dart';
-import 'package:random_color_app/utility/color_utils.dart';
+
+/// A constant maximum number of lines in the text of 2.
+const textMaxLines = 2;
 
 /// This widget is the main page of application.
 class HomePage extends StatefulWidget {
@@ -13,46 +17,81 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isPressed = true;
-  Color color = Colors.white;
+  HomePageController screenController = HomePageController();
+
   @override
   Widget build(BuildContext context) {
-    // We use a [Listener] to detect when the user
-    // presses up and down on the screen.
-    return Listener(
-      onPointerDown: _onPointerDown,
-      onPointerUp: _onPointerUp,
-      child: Material(
-        color: color,
-        child: SafeArea(
-          child: Center(
-            child: NeumorphicContainer(
-              color: color,
-              isPressed: _isPressed,
-              child: const Text(
-                "Hello World!",
-                // To avoid text overflow, we use the following arguments
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+    return ChangeNotifierProvider<HomePageController>.value(
+      value: screenController,
+      child: Consumer<HomePageController>(
+        builder: (context, controller, child) {
+          // We use a [Listener] to detect when the user
+          // presses up and down on the screen.
+          return Stack(
+            children: [
+              Listener(
+                onPointerDown: (_) {
+                  controller.isButtonPressed(isPressed: true);
+                },
+                onPointerUp: (_) {
+                  controller.isButtonPressed(isPressed: false);
+                },
+                child: Material(
+                  color: controller.state.selectedBackgroundColor,
+                  child: SafeArea(
+                    child: Center(
+                      child: NeumorphicContainer(
+                        color: controller.state.selectedBackgroundColor,
+                        isPressed: controller.state.isPressedButton,
+                        child: Text(
+                          "Hello there",
+                          style: TextStyle(
+                            color: controller.state.selectedTextColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          // To avoid text overflow,
+                          // we use the following arguments
+                          maxLines: textMaxLines,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
+              // Error state
+              if (controller.state.isError)
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 500),
+                  opacity: controller.state.isError ? 1 : 0,
+                  child: Material(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Something went wrong'),
+                          const SizedBox(height: 40),
+                          ElevatedButton(
+                            onPressed: () {
+                              controller.generateColors();
+                            },
+                            child: const Text("Try again"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  void _onPointerDown(_) {
-    setState(() {
-      _isPressed = true;
-    });
-  }
-
-  void _onPointerUp(_) {
-    setState(() {
-      _isPressed = false;
-      final newColor = ColorUtils.materialColors.getRandom() ?? Colors.black;
-      color = newColor;
-    });
+  @override
+  void dispose() {
+    screenController.dispose();
+    super.dispose();
   }
 }
